@@ -8,7 +8,7 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container mx-auto">
-        <a class="navbar-brand text-primary fw-bolder" href="#">Todo<span class="text-danger">-List</span></a>
+        <a class="navbar-brand text-primary fw-bolder" th:href="@{/todo}">Todo<span class="text-danger">-List</span></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -36,36 +36,48 @@
     </div>
 </nav>
 <main>
-    <div class="container">
+    <div class="container d-flex justify-content-between align-items-center">
         <h3 class="my-5 text-secondary">Todos List</h3>
+        <div>
+            <form th:action="@{/todo/search}" th:object="${todoLists}" method="get">
+                <div class="d-flex gap-1">
+                    <label for="searchTask"></label>
+                    <input type="text" id="searchTask" name="searchTask" required class="form-control" placeholder="Search task">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+            </form>
+        </div>
+
     </div>
     <div class="container">
         <p class="text-black-50">- You can create your new Todo by using the button below!</p>
         <!-- Button trigger modal to create-->
-        <button type="button" class="btn btn-primary mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <button type="button" class="btn btn-primary mb-4" data-bs-toggle="modal" data-bs-target="#createModal">
             New Todo +
         </button>
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Create your Todo</h5>
+                        <h5 class="modal-title" id="createModalLabel">Create your Todo</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label for="task" class="form-label">Task</label>
-                            <input type="text" class="form-control" id="task" placeholder="your title task...">
+                    <form th:action="@{/todo/new}" method="post">
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="task" class="form-label">Task</label>
+                                <input type="text" class="form-control" id="task" placeholder="Your title task..." name="task">
+                            </div>
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Description</label>
+                                <input type="text" class="form-control" id="description" placeholder="Your description..." name="description">
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="description" class="form-label">Description</label>
-                            <input type="text" class="form-control" id="description" placeholder="your description...">
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <input type="submit" class="btn btn-primary" value="Create">
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -91,7 +103,9 @@
                     <td>
                         <div class="flex justify-center">
                             <a href="#"><button class="btn btn-primary">Edit</button></a>
-                            <a href="#"><button class="btn btn-danger">Delete</button></a>
+                            <a th:href="@{'/todo/delete/' + ${todoList.id}}" onclick="return confirm('Are you sure you want to delete this item?')">
+                                <button class="btn btn-danger">Delete</button>
+                            </a>
                         </div>
                     </td>
                 </tr>
