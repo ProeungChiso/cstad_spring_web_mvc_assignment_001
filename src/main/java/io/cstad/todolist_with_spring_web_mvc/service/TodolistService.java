@@ -27,5 +27,8 @@ public class TodolistService {
     public List<Todo> searchTask(String task){
         return todolistDataSource.searchTask(task);
     }
+    public void updateTodoRow(Integer id, String task, String description, Boolean isDone) {
+        todolistDataSource.updateTodoRow(id, task, description, isDone);
+    }
 
 }

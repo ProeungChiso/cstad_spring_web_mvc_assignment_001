@@ -43,8 +43,15 @@ public class TodolistController {
         model.addAttribute("todoLists", foundTodos);
         return "index";
     }
-
-
-
-
+    @GetMapping("/todo/edit/{id}")
+    public String editTodoRow(@PathVariable("id") int id, Model model) {
+        Optional<Todo> todoOptional = todolistService.getOneTodolist(id);
+        todoOptional.ifPresent(todo -> model.addAttribute("todoLists", todo));
+        return "edit";
+    }
+    @PostMapping("/todo/update")
+    public String updateTodoRow(@ModelAttribute Todo todo) {
+        todolistService.updateTodoRow(todo.getId(), todo.getTask(), todo.getDescription(), todo.isDone());
+        return "redirect:/todo";
+    }
 }

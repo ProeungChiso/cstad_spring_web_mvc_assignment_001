@@ -42,5 +42,21 @@ public class TodoListDataSource {
     public void deleteTodoRowById(Integer id) {
         todoList.removeIf(todo -> todo.getId().equals(id));
     }
+    public void updateTodoRow(Integer id, String task, String description, Boolean isDone) {
+        todoList.stream()
+                .filter(todo -> todo.getId().equals(id))
+                .findFirst()
+                .ifPresent(todo -> {
+                    if (task != null && !task.isEmpty()) {
+                        todo.setTask(task);
+                    }
+                    if (description != null && !description.isEmpty()) {
+                        todo.setDescription(description);
+                    }
+                    if (isDone != null) {
+                        todo.setDone(isDone);
+                    }
+                });
+    }
 
 }
