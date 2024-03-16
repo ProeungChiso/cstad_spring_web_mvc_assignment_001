@@ -44,14 +44,16 @@ public class TodolistController {
         return "index";
     }
     @GetMapping("/todo/edit/{id}")
-    public String editTodoRow(@PathVariable("id") int id, Model model) {
+    public String showEditForm(@PathVariable("id") Integer id, Model model) {
         Optional<Todo> todoOptional = todolistService.getOneTodolist(id);
-        todoOptional.ifPresent(todo -> model.addAttribute("todoLists", todo));
+        Todo todo = todoOptional.orElse(new Todo());
+        model.addAttribute("todo", todo);
         return "edit";
     }
     @PostMapping("/todo/update")
-    public String updateTodoRow(@ModelAttribute Todo todo) {
-        todolistService.updateTodoRow(todo.getId(), todo.getTask(), todo.getDescription(), todo.isDone());
+    public String updateTodoRow(@ModelAttribute Todo todo, Model model) {
+        todolistService.updateTodoRow(todo);
+        model.addAttribute("todo", todo);
         return "redirect:/todo";
     }
 }
